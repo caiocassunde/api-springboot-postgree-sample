@@ -13,24 +13,15 @@ public class Person {
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	@JsonProperty("id")
 	public UUID id = UUID.randomUUID();
-	@JsonProperty("name")
-	public String name;
 	@JsonProperty("document")
 	public String document;
+	@JsonProperty("name")
+	public String name;
+
 
 	@JsonProperty("id")
 	public String getId() {
 		return id.toString();
-	}
-
-	@JsonProperty("name")
-	public String name() {
-		return name;
-	}
-
-	@JsonProperty("name")
-	public void name(String name) {
-		this.name = name;
 	}
 
 	@JsonProperty("document")
@@ -41,5 +32,15 @@ public class Person {
 	@JsonProperty("document")
 	public void document(String document) {
 		this.document = document;
+	}
+	
+	@JsonProperty("name")
+	public String name() {
+		return name;
+	}
+
+	@JsonProperty("name")
+	public void name(String name) {
+		this.name = name;
 	}
 }

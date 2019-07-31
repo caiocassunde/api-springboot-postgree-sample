@@ -26,7 +26,17 @@ public class Controller {
 	}
 
 	@PostMapping("/person")
-	public Person postPerson(@RequestBody Person produto){
-		return personRepository.save(produto);
+	public Person postPerson(@RequestBody Person person){
+		return personRepository.save(person);
+	}
+
+	@DeleteMapping("/person")
+	public String deletePerson(@RequestBody Person person){
+			personRepository.delete(person);
+			return("Deleção Realizada com Sucesso!");
+	}
+	@PutMapping("/person")
+	public Person putPerson(@RequestBody Person person){
+		return personRepository.save(person);
 	}
 }
