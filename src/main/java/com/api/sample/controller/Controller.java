@@ -32,16 +32,10 @@ public class Controller {
 		return personRepository.findAll();
 	}
 
-	@GetMapping("/person/{id}")
+	@GetMapping("/person/get-id")
 	@ApiOperation(value="Select a unique person in PostgreSQL DB")
-	public Optional<Person> getPersonById(@PathVariable(value="id") UUID id){
-		try {
-			return personRepository.findById(id);
-		}
-		catch(NonUniqueResultException e) {
-			System.out.println("caiu exception");
-			return null;
-		}
+	public Optional<Person> getPersonById(@RequestParam(value="id") UUID id){
+		return personRepository.findById(id);
 	}
 	
 	@GetMapping("/person/get-document")
@@ -103,6 +97,7 @@ public class Controller {
 	@ApiOperation(value="Update values of a unique person in PostgreSQL DB")
 	public Return putPerson(@RequestBody Person person){
 		Optional<Person> testId = personRepository.findById(person.id);
+		System.out.println(testId);
 		if(testId != null) {
 			Person test = new Person();
 			test = personRepository.findByDocument(person.document);
@@ -118,7 +113,7 @@ public class Controller {
 				return ret;
 			}
 		}	
-		else {
+		else{
 			ret.setStatus(200);
 			ret.setMessage("Id não Cadastrado na Base de Dados");
 			return ret;
