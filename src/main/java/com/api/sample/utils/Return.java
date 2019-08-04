@@ -1,4 +1,4 @@
-package utils;
+package com.api.sample.utils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

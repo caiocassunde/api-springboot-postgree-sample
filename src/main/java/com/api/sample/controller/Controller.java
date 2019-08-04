@@ -2,9 +2,10 @@ package com.api.sample.controller;
 
 import com.api.sample.model.Person;
 import com.api.sample.repository.PersonRepository;
+import com.api.sample.utils.Return;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import utils.Return;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -101,17 +102,25 @@ public class Controller {
 	@PutMapping("/person")
 	@ApiOperation(value="Update values of a unique person in PostgreSQL DB")
 	public Return putPerson(@RequestBody Person person){
-		Person test = new Person();
-		test = personRepository.findByDocument(person.document);
-		if(test != null) {
-			personRepository.save(person);
-			ret.setStatus(200);
-			ret.setMessage("Alteração realizada com Sucesso");
-			return ret;
-		}
+		Optional<Person> testId = personRepository.findById(person.id);
+		if(testId != null) {
+			Person test = new Person();
+			test = personRepository.findByDocument(person.document);
+			if(test != null) {
+				personRepository.save(person);
+				ret.setStatus(200);
+				ret.setMessage("Alteração realizada com Sucesso");
+				return ret;
+			}
+			else {
+				ret.setStatus(200);
+				ret.setMessage("Documento não Cadastrado na Base de Dados");
+				return ret;
+			}
+		}	
 		else {
 			ret.setStatus(200);
-			ret.setMessage("Documento não Cadastrado na Base de Dados");
+			ret.setMessage("Id não Cadastrado na Base de Dados");
 			return ret;
 		}
 	}
