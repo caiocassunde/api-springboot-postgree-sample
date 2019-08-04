@@ -14,7 +14,7 @@ public class Person {
 	@JsonProperty("id")
 	public UUID id = UUID.randomUUID();
 	@JsonProperty("document")
-	public String document;
+	public long document;
 	@JsonProperty("name")
 	public String name;
 
@@ -25,12 +25,12 @@ public class Person {
 	}
 
 	@JsonProperty("document")
-	public String document() {
+	public long document() {
 		return document;
 	}
 
 	@JsonProperty("document")
-	public void document(String document) {
+	public void document(long document) {
 		this.document = document;
 	}
 	
