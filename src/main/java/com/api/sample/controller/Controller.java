@@ -67,7 +67,7 @@ public class Controller {
 			if(test.toString().equals("Optional.empty")) {
 				ret.setStatus(HttpStatus.NO_CONTENT.toString());
 				ret.setMessage("Id não encontrado");
-				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ret);
+				return ResponseEntity.status(HttpStatus.OK).body(ret);
 			}
 			else{
 				return ResponseEntity.status(HttpStatus.OK).body(test);
@@ -75,7 +75,7 @@ public class Controller {
 		}
 		catch(Exception e) {
 			ret.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
-			ret.setMessage("Erro interno de Servidor");
+			ret.setMessage("Erro interno de Servidor"); 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ret);
 		}
 	}
@@ -87,8 +87,8 @@ public class Controller {
 			Person test = personRepository.findByDocument(document);
 			if(test == null) {
 				ret.setStatus(HttpStatus.NO_CONTENT.toString());
-				ret.setMessage("Id não encontrado");
-				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ret);
+				ret.setMessage("Documento não encontrado");
+				return ResponseEntity.status(HttpStatus.OK).body(ret);
 			}
 			else{
 				return ResponseEntity.status(HttpStatus.OK).body(test);
