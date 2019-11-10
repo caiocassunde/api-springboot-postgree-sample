@@ -36,99 +36,152 @@ public class Controller {
 	@Autowired
 	PersonRepository personRepository;
 	
-	Return ret = new Return();
+	private Return ret = new Return();
 
 	@GetMapping("/person")
 	@ApiOperation(value="Select a list of people in PostgreSQL DB")
-	public List<Person> getPerson(){
-		return personRepository.findAll();
+	public Object getPerson(){
+		try {
+			List<Person> test = personRepository.findAll();
+			if(test.toString().equals("Optional.empty")) {
+				ret.setStatus(HttpStatus.NO_CONTENT.toString());
+				ret.setMessage("Base de dados vazia");
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ret);
+			}
+			else{
+				return ResponseEntity.status(HttpStatus.OK).body(test);
+			}
+		}
+		catch(Exception e) {
+			ret.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			ret.setMessage("Erro interno de Servidor");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ret);
+		}
 	}
 
 	@GetMapping("/person/get-id")
 	@ApiOperation(value="Select a unique person in PostgreSQL DB")
-	public Optional<Person> getPersonById(@RequestParam(value="id") UUID id){
-		return personRepository.findById(id);
+	public Object getPersonById(@RequestParam(value="id") UUID id){
+		try {
+			Optional<Person> test = personRepository.findById(id);
+			if(test.toString().equals("Optional.empty")) {
+				ret.setStatus(HttpStatus.NO_CONTENT.toString());
+				ret.setMessage("Id não encontrado");
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ret);
+			}
+			else{
+				return ResponseEntity.status(HttpStatus.OK).body(test);
+			}
+		}
+		catch(Exception e) {
+			ret.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			ret.setMessage("Erro interno de Servidor");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ret);
+		}
 	}
 	
 	@GetMapping("/person/get-document")
 	@ApiOperation(value="Select a unique person in PostgreSQL DB")
-	public Person getPersonByDocument(@RequestParam(value="document") long document){
+	public Object getPersonByDocument(@RequestParam(value="document") long document){
 		try {
-			Person test = new Person();
-			test = personRepository.findByDocument(document);
-			if(test != null) {
-				return test;
+			Person test = personRepository.findByDocument(document);
+			if(test == null) {
+				ret.setStatus(HttpStatus.NO_CONTENT.toString());
+				ret.setMessage("Id não encontrado");
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ret);
 			}
-			else {
-				return null;
+			else{
+				return ResponseEntity.status(HttpStatus.OK).body(test);
 			}
 		}
 		catch(NonUniqueResultException e) {
-			System.out.println("caiu exception");
-			return null;
+			ret.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			ret.setMessage("Erro interno de Servidor");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ret);
 		}
 	}
 
 	@PostMapping("/person")
 	@ApiOperation(value="Insert a unique person in PostgreSQL DB")
 	public ResponseEntity<Return> ResponseEntity(@RequestBody Person person){
-		Person test = new Person();
-		test = personRepository.findByDocument(person.document);
-		if(test == null) {
-			personRepository.save(person);
-			ret.setStatus(HttpStatus.CREATED.toString());
-			ret.setMessage("Inclusão realizada com Sucesso");
-			return ResponseEntity.status(HttpStatus.CREATED).body(ret);
+		try {
+			Person test = new Person();
+			test = personRepository.findByDocument(person.document);
+			if(test == null) {
+				personRepository.save(person);
+				ret.setStatus(HttpStatus.CREATED.toString());
+				ret.setMessage("Inclusão realizada com Sucesso");
+				return ResponseEntity.status(HttpStatus.CREATED).body(ret);
+			}
+			else{
+				ret.setStatus(HttpStatus.OK.toString());
+				ret.setMessage("Cliente ja Existe na Base de Dados");
+				return ResponseEntity.status(HttpStatus.OK).body(ret);		
+			}
 		}
-		else {
-			ret.setStatus(HttpStatus.OK.toString());
-			ret.setMessage("Cliente ja Existe na Base de Dados");
-			return ResponseEntity.status(HttpStatus.OK).body(ret);		
+		catch(Exception e) {
+			ret.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			ret.setMessage("Erro interno de Servidor");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ret);
 		}
 	}
 
 	@DeleteMapping("/person/document={document}")
 	@ApiOperation(value="Delete a unique person in PostgreSQL DB")
 	public ResponseEntity<Return> deletePerson(@PathVariable(value="document") long document){
-		Person test = new Person();
-		test = personRepository.findByDocument(document);
-		if(test != null) {
-			personRepository.delete(test);
-			ret.setStatus(HttpStatus.OK.toString());
-			ret.setMessage("Deleção realizada com Sucesso");
-			return ResponseEntity.status(HttpStatus.OK).body(ret);
+		try {
+			Person test = new Person();
+			test = personRepository.findByDocument(document);
+			if(test != null) {
+				personRepository.delete(test);
+				ret.setStatus(HttpStatus.OK.toString());
+				ret.setMessage("Deleção realizada com Sucesso");
+				return ResponseEntity.status(HttpStatus.OK).body(ret);
+			}
+			else{
+				ret.setStatus(HttpStatus.OK.toString());
+				ret.setMessage("Documento não Cadastrado na Base de Dados");
+				return ResponseEntity.status(HttpStatus.OK).body(ret);
+			}
 		}
-		else {
-			ret.setStatus(HttpStatus.OK.toString());
-			ret.setMessage("Documento não Cadastrado na Base de Dados");
-			return ResponseEntity.status(HttpStatus.OK).body(ret);
+		catch(Exception e) {
+			ret.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			ret.setMessage("Erro interno de Servidor");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ret);
 		}
 	}
 	
 	@PutMapping("/person")
 	@ApiOperation(value="Update values of a unique person in PostgreSQL DB")
 	public ResponseEntity<Return> putPerson(@RequestBody Person person){
-		Optional<Person> testId = personRepository.findById(person.id);
-		System.out.println(testId);
-		if(testId != null) {
-			Person test = new Person();
-			test = personRepository.findByDocument(person.document);
-			if(test != null) {
-				personRepository.save(person);
+		try {
+			Optional<Person> testId = personRepository.findById(person.id);
+			System.out.println(testId);
+			if(testId != null) {
+				Person test = new Person();
+				test = personRepository.findByDocument(person.document);
+				if(test != null) {
+					personRepository.save(person);
+					ret.setStatus(HttpStatus.OK.toString());
+					ret.setMessage("Alteração realizada com Sucesso");
+					return ResponseEntity.status(HttpStatus.OK).body(ret);
+				}
+				else{
+					ret.setStatus(HttpStatus.OK.toString());
+					ret.setMessage("Documento não Cadastrado na Base de Dados");
+					return ResponseEntity.status(HttpStatus.OK).body(ret);
+				}
+			}	
+			else{
 				ret.setStatus(HttpStatus.OK.toString());
-				ret.setMessage("Alteração realizada com Sucesso");
+				ret.setMessage("Id não Cadastrado na Base de Dados");
 				return ResponseEntity.status(HttpStatus.OK).body(ret);
 			}
-			else {
-				ret.setStatus(HttpStatus.OK.toString());
-				ret.setMessage("Documento não Cadastrado na Base de Dados");
-				return ResponseEntity.status(HttpStatus.OK).body(ret);
-			}
-		}	
-		else{
-			ret.setStatus(HttpStatus.OK.toString());
-			ret.setMessage("Id não Cadastrado na Base de Dados");
-			return ResponseEntity.status(HttpStatus.OK).body(ret);
+		}
+		catch(Exception e) {
+			ret.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			ret.setMessage("Erro interno de Servidor");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ret);
 		}
 	}
 }
