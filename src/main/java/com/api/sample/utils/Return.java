@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Return {
 	@JsonProperty("status")
-	public int status;
+	public String status;
 	@JsonProperty("message")
 	public String message;
 	
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	public String getMessage() {
