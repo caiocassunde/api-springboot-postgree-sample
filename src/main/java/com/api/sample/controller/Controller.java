@@ -6,9 +6,12 @@ import java.util.UUID;
 
 import javax.persistence.NonUniqueResultException;
 
+import jdk.nashorn.internal.objects.NativeJSON;
+import org.apache.tomcat.jni.Socket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.sample.model.Person;
 import com.api.sample.repository.PersonRepository;
 import com.api.sample.utils.Return;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +39,9 @@ public class Controller {
 
 	@Autowired
 	PersonRepository personRepository;
+	@Autowired
+	private KafkaTemplate template;
+	
 	
 	private Return ret = new Return();
 
@@ -103,11 +110,12 @@ public class Controller {
 
 	@PostMapping("/person")
 	@ApiOperation(value="Insert a unique person in PostgreSQL DB")
-	public ResponseEntity<Return> ResponseEntity(@RequestBody Person person){
+	public ResponseEntity<Return> ResponseEntity(@RequestBody Person person, Socket kafkaTemplate){
 		try {
 			Person test = new Person();
 			test = personRepository.findByDocument(person.document);
 			if(test == null) {
+				template.send("api-spring-topic", person.toString());
 				personRepository.save(person);
 				ret.setStatus(HttpStatus.CREATED.toString());
 				ret.setMessage("Inclusão realizada com Sucesso");

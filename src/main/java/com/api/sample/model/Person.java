@@ -18,6 +18,14 @@ public class Person {
 	@JsonProperty("name")
 	public String name;
 
+	@Override
+	public String toString() {
+		return "Person{" +
+				"id=" + id +
+				", document=" + document +
+				", name='" + name + '\'' +
+				'}';
+	}
 
 	@JsonProperty("id")
 	public String getId() {
