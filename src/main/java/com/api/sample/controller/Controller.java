@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.NonUniqueResultException;
-
-import jdk.nashorn.internal.objects.NativeJSON;
 import org.apache.tomcat.jni.Socket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.sample.model.Person;
 import com.api.sample.repository.PersonRepository;
 import com.api.sample.utils.Return;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
