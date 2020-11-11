@@ -19,14 +19,4 @@ public class Person {
 	public long document;
 	@JsonProperty("name")
 	public String name;
-
-	@Override
-	public String toString() {
-		return "Person{" +
-				"id=" + id +
-				", document=" + document +
-				", name='" + name + '\'' +
-				'}';
-	}
-
 }
