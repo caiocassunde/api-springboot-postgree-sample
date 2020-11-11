@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.UUID;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name="TB_PERSON")
 public class Person {
@@ -27,28 +29,4 @@ public class Person {
 				'}';
 	}
 
-	@JsonProperty("id")
-	public String getId() {
-		return id.toString();
-	}
-
-	@JsonProperty("document")
-	public long document() {
-		return document;
-	}
-
-	@JsonProperty("document")
-	public void document(long document) {
-		this.document = document;
-	}
-	
-	@JsonProperty("name")
-	public String name() {
-		return name;
-	}
-
-	@JsonProperty("name")
-	public void name(String name) {
-		this.name = name;
-	}
 }
