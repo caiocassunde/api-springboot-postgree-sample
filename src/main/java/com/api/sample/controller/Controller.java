@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.NonUniqueResultException;
+
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jni.Socket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ import com.api.sample.utils.Return;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+@Slf4j
 @RestController
 @RequestMapping(value="/api")
 @Api(value="API REST Sample")
@@ -108,6 +111,7 @@ public class Controller {
 	@PostMapping("/person")
 	@ApiOperation(value="Insert a unique person in PostgreSQL DB")
 	public ResponseEntity<Return> ResponseEntity(@RequestBody Person person, Socket kafkaTemplate){
+		log.info("teste");
 		try {
 			Person test = new Person();
 			test = personRepository.findByDocument(person.document);
