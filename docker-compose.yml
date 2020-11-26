@@ -8,8 +8,6 @@ services:
       - POSTGRES_DB=TB_PERSON
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    networks:
-      - postgres-compose-network
 
   zookeeper:
     image: wurstmeister/zookeeper
@@ -23,7 +21,3 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-
-networks:
-  postgres-compose-network:
-    driver: bridge
