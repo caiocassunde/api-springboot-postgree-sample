@@ -33,6 +33,7 @@ public class PersonService {
         if (!CollectionUtils.isEmpty(people)) {
 
             List<PersonDto> peopleDto = people.stream().map(person -> PersonDto.builder()
+                    .id(person.getId())
                     .document(person.getDocument())
                     .name(person.getName())
                     .build()).collect(Collectors.toList());
@@ -48,6 +49,7 @@ public class PersonService {
         Person person = personRepository.findById(id).orElse(null);
         if (Objects.nonNull(person)) {
             return ResponseEntity.status(HttpStatus.OK).body(PersonDto.builder()
+                    .id(person.getId())
                     .document(person.getDocument())
                     .name(person.getName())
                     .build());
@@ -61,6 +63,7 @@ public class PersonService {
         Person person = personRepository.findByDocument(document).orElse(null);
         if (Objects.nonNull(person)) {
             return ResponseEntity.status(HttpStatus.OK).body(PersonDto.builder()
+                    .id(person.getId())
                     .document(person.document)
                     .name(person.getName())
                     .build());
@@ -75,7 +78,6 @@ public class PersonService {
             personRepository.findByDocument(person.getDocument());
 
             template.send("api-spring-topic", person.toString());
-
             personRepository.save(person);
             ret = buildReturn("Created", HttpStatus.CREATED.toString());
         } catch (DataIntegrityViolationException ex) {
@@ -98,11 +100,16 @@ public class PersonService {
     }
 
     public ResponseEntity<Object> putPerson(Person person) {
-        Person personInDb = personRepository.findById(person.getId()).orElse(null);
+        Person personInDb = personRepository.findByDocument(person.getDocument()).orElse(null);
 
         if (Objects.nonNull(personInDb)) {
-            personRepository.save(person);
-            ret = buildReturn("Change With Success", HttpStatus.OK.toString());
+            if(person.getId().equals(personInDb.getId())){
+                personRepository.save(person);
+                ret = buildReturn("Change With Success", HttpStatus.OK.toString());
+            } else{
+                ret = buildReturn("The id is not the same of this document", HttpStatus.NOT_FOUND.toString());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
+            }
             return ResponseEntity.status(HttpStatus.OK).body(ret);
         } else {
             ret = buildReturn("Document Not in Database", HttpStatus.NOT_FOUND.toString());

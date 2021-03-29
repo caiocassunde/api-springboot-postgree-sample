@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.*;
 
-@Setter
+@Data
 @ToString
 @EqualsAndHashCode
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
@@ -18,6 +18,8 @@ import lombok.*;
 @JsonDeserialize(builder = PersonDto.PersonDtoBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PersonDto {
+	public Long id;
+
 	public Long document;
 
 	public String name;

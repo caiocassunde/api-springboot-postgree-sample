@@ -1,5 +1,6 @@
 package com.api.sample.controller;
 
+import com.api.sample.data.dto.PersonDto;
 import com.api.sample.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
