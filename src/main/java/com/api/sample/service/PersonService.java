@@ -1,8 +1,8 @@
 package com.api.sample.service;
 
+import com.api.sample.data.dto.PersonDto;
 import com.api.sample.data.dto.Return;
 import com.api.sample.data.entity.Person;
-//import com.api.sample.data.mapper.PersonMapper;
 import com.api.sample.data.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -22,17 +23,21 @@ import java.util.Objects;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    //private final PersonMapper personMapper;
     private final KafkaTemplate template;
-    private Return ret;
     private final String NOT_FOUND_MESSAGE = "Not found";
+    private Return ret;
 
     public ResponseEntity<Object> getAllPerson() {
         List<Person> people = personRepository.findAll();
 
         if (!CollectionUtils.isEmpty(people)) {
-            //return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(people));
-            return ResponseEntity.status(HttpStatus.OK).body(people);
+
+            List<PersonDto> peopleDto = people.stream().map(person -> PersonDto.builder()
+                    .document(person.getDocument())
+                    .name(person.getName())
+                    .build()).collect(Collectors.toList());
+
+            return ResponseEntity.status(HttpStatus.OK).body(peopleDto);
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
@@ -42,8 +47,10 @@ public class PersonService {
     public ResponseEntity<Object> getPersonById(Long id) {
         Person person = personRepository.findById(id).orElse(null);
         if (Objects.nonNull(person)) {
-            //return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(person));
-            return ResponseEntity.status(HttpStatus.OK).body(person);
+            return ResponseEntity.status(HttpStatus.OK).body(PersonDto.builder()
+                    .document(person.getDocument())
+                    .name(person.getName())
+                    .build());
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
@@ -53,8 +60,10 @@ public class PersonService {
     public ResponseEntity<Object> getPersonByDocument(Long document) {
         Person person = personRepository.findByDocument(document).orElse(null);
         if (Objects.nonNull(person)) {
-            //return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(person));
-            return ResponseEntity.status(HttpStatus.OK).body(person);
+            return ResponseEntity.status(HttpStatus.OK).body(PersonDto.builder()
+                    .document(person.document)
+                    .name(person.getName())
+                    .build());
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
