@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "906658c9-b447-4580-89f9-f573f119dd81",
-		"name": "Collection - API REST (Spring Boot + PostgreSQL)",
+		"name": "api-springboot-sample",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -166,6 +166,28 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "df054bbc-224c-48ad-bfc9-a3a7faf7660f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c0c7588e-1067-4982-ace4-1b15dfc58ca5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
