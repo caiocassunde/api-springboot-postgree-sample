@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface PersonMapper {
+
     PersonDTO domainToResponse(Person person);
 
     List<PersonDTO> domainToResponse(List<Person> person);
