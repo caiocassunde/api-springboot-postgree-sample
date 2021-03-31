@@ -9,7 +9,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.*;
 
-@Data
+import java.time.LocalDateTime;
+import java.util.Date;
+
+@Getter
 @ToString
 @EqualsAndHashCode
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
@@ -18,15 +21,17 @@ import lombok.*;
 @JsonDeserialize(builder = PersonDTO.PersonDtoBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PersonDTO {
-	public Long id;
+    public Long id;
 
-	public Long document;
+    public Long document;
 
-	public String name;
+    public String name;
 
-	@JsonPOJOBuilder(withPrefix = "")
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class PersonDtoBuilder {
+    public LocalDateTime timestampGet;
 
-	}
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PersonDtoBuilder {
+
+    }
 }

@@ -18,13 +18,13 @@ import lombok.*;
 @JsonDeserialize(builder = Return.ReturnBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Return {
-	public String status;
+    public String status;
 
-	public String message;
+    public String message;
 
-	@JsonPOJOBuilder(withPrefix = "")
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class ReturnBuilder {
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class ReturnBuilder {
 
-	}
+    }
 }

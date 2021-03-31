@@ -8,12 +8,12 @@ import org.springframework.kafka.annotation.KafkaListener;
 @SpringBootApplication
 @ComponentScan("com")
 public class SampleApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(SampleApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SampleApplication.class, args);
+    }
 
-	//@KafkaListener(topics = "api-spring-topic", groupId = "api-spring-group")
-	//public void listen(String message) {
-	//	System.out.println("Received Messasge in group - group-id: " + message);
-	//}
+    //@KafkaListener(topics = "api-spring-topic", groupId = "api-spring-group")
+    //public void listen(String message) {
+    //	System.out.println("Received Messasge in group - group-id: " + message);
+    //}
 }

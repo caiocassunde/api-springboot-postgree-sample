@@ -1,6 +1,5 @@
 package com.api.sample.service;
 
-import com.api.sample.data.dto.PersonDTO;
 import com.api.sample.data.dto.Return;
 import com.api.sample.data.entity.Person;
 import com.api.sample.data.mapper.PersonMapper;
@@ -16,7 +15,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -90,10 +88,10 @@ public class PersonService {
         Person personInDb = personRepository.findByDocument(person.getDocument()).orElse(null);
 
         if (Objects.nonNull(personInDb)) {
-            if(person.getId().equals(personInDb.getId())){
+            if (person.getId().equals(personInDb.getId())) {
                 personRepository.save(person);
                 ret = buildReturn("Change With Success", HttpStatus.OK.toString());
-            } else{
+            } else {
                 ret = buildReturn("The id is not the same of this document", HttpStatus.NOT_FOUND.toString());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
             }
