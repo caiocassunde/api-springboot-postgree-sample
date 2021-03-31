@@ -61,9 +61,9 @@ public class PersonService {
     public ResponseEntity<Object> insertPerson(Person person) {
         try {
             personRepository.findByDocument(person.getDocument());
-
-            template.send("api-spring-topic", person.toString());
             personRepository.save(person);
+
+            template.send("api-spring-topic", personMapper.domainToResponse(person).toString());
             ret = buildReturn("Created", HttpStatus.CREATED.toString());
         } catch (DataIntegrityViolationException ex) {
             ret = buildReturn("Document already in database", HttpStatus.BAD_REQUEST.toString());
