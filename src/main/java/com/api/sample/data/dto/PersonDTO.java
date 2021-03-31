@@ -15,9 +15,9 @@ import lombok.*;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderClassName = "PersonDtoBuilder", toBuilder = true)
-@JsonDeserialize(builder = PersonDto.PersonDtoBuilder.class)
+@JsonDeserialize(builder = PersonDTO.PersonDtoBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PersonDto {
+public class PersonDTO {
 	public Long id;
 
 	public Long document;

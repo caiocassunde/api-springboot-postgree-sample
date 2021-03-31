@@ -1,6 +1,6 @@
 package com.api.sample.service;
 
-import com.api.sample.data.dto.PersonDto;
+import com.api.sample.data.dto.PersonDTO;
 import com.api.sample.data.dto.Return;
 import com.api.sample.data.entity.Person;
 import com.api.sample.data.repository.*;
@@ -32,7 +32,7 @@ public class PersonService {
 
         if (!CollectionUtils.isEmpty(people)) {
 
-            List<PersonDto> peopleDto = people.stream().map(person -> PersonDto.builder()
+            List<PersonDTO> peopleDto = people.stream().map(person -> PersonDTO.builder()
                     .id(person.getId())
                     .document(person.getDocument())
                     .name(person.getName())
@@ -48,7 +48,7 @@ public class PersonService {
     public ResponseEntity<Object> getPersonById(Long id) {
         Person person = personRepository.findById(id).orElse(null);
         if (Objects.nonNull(person)) {
-            return ResponseEntity.status(HttpStatus.OK).body(PersonDto.builder()
+            return ResponseEntity.status(HttpStatus.OK).body(PersonDTO.builder()
                     .id(person.getId())
                     .document(person.getDocument())
                     .name(person.getName())
@@ -62,7 +62,7 @@ public class PersonService {
     public ResponseEntity<Object> getPersonByDocument(Long document) {
         Person person = personRepository.findByDocument(document).orElse(null);
         if (Objects.nonNull(person)) {
-            return ResponseEntity.status(HttpStatus.OK).body(PersonDto.builder()
+            return ResponseEntity.status(HttpStatus.OK).body(PersonDTO.builder()
                     .id(person.getId())
                     .document(person.document)
                     .name(person.getName())
