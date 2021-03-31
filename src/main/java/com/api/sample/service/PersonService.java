@@ -3,6 +3,7 @@ package com.api.sample.service;
 import com.api.sample.data.dto.PersonDTO;
 import com.api.sample.data.dto.Return;
 import com.api.sample.data.entity.Person;
+import com.api.sample.data.mapper.PersonMapper;
 import com.api.sample.data.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    //private final PersonMapper personMapper;
     private final KafkaTemplate template;
     private final String NOT_FOUND_MESSAGE = "Not found";
     private Return ret;
@@ -32,13 +34,13 @@ public class PersonService {
 
         if (!CollectionUtils.isEmpty(people)) {
 
-            List<PersonDTO> peopleDto = people.stream().map(person -> PersonDTO.builder()
+            List<PersonDTO> peopleDTO = people.stream().map(person -> PersonDTO.builder()
                     .id(person.getId())
                     .document(person.getDocument())
                     .name(person.getName())
                     .build()).collect(Collectors.toList());
-
-            return ResponseEntity.status(HttpStatus.OK).body(peopleDto);
+            return ResponseEntity.status(HttpStatus.OK).body(peopleDTO);
+            //return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(people));
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
@@ -53,6 +55,7 @@ public class PersonService {
                     .document(person.getDocument())
                     .name(person.getName())
                     .build());
+            //return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(person));
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
@@ -67,6 +70,7 @@ public class PersonService {
                     .document(person.document)
                     .name(person.getName())
                     .build());
+            //return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(person));
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
