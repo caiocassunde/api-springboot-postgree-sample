@@ -150,6 +150,14 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/com/api/sample/data/**</exclude>
+                        <exclude>**/com/api/sample/config/**</exclude>
+                        <exclude>**/com/api/sample/controller/**</exclude>
+                        <exclude>**/com/api/sample/SampleApplication.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

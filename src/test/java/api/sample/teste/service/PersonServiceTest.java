@@ -10,13 +10,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.util.concurrent.SettableListenableFuture;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,15 +50,22 @@ public class PersonServiceTest {
     private KafkaTemplate template;
 
 	@Test
-	public void getAllPersonTest() throws IOException {
+	public void getAllPersonTest() {
 		when(personRepository.findAll()).thenReturn(personListMock());
 		when(personMapper.domainToResponse((List<Person>) any())).thenReturn(personDTOListMock());
 
-		personService.getPersonById(1L);
+		personService.getAllPerson();
 	}
 
     @Test
-    public void getPersonByIdTest() throws IOException {
+    public void getAllPersonNullTest() {
+        when(personRepository.findAll()).thenReturn(null);
+
+        personService.getAllPerson();
+    }
+
+    @Test
+    public void getPersonByIdTest() {
         when(personRepository.findById(anyLong())).thenReturn(Optional.of(personMock()));
         when(personMapper.domainToResponse((Person) any())).thenReturn(personDTOMock());
 
@@ -62,34 +73,76 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void getPersonByDocumentTest() throws IOException {
+    public void getPersonByIdNullTest() {
+        personService.getPersonById(1L);
+    }
+
+    @Test
+    public void getPersonByDocumentTest() {
         when(personRepository.findByDocument(anyLong())).thenReturn(Optional.of(personMock()));
         when(personMapper.domainToResponse((Person) any())).thenReturn(personDTOMock());
 
         personService.getPersonByDocument(1L);
     }
 
-//	@Test
-//	public void createNewPersonTest() {
-//		when(personRepository.findByDocument(anyLong())).thenReturn(null);
-//		when(template.send(anyString(), anyString())).thenReturn(OngoingStubbing<CompletableFuture>());
-//
-//		Person person = new Person(1L, 123L, "teste");
-//
-//		personService.insertPerson(person);
-//	}
+    @Test
+    public void getPersonByDocumentNullTest() {
+        personService.getPersonByDocument(1L);
+    }
 
-//	private List<Person> buildPersonResponseList(String responseFilePath) throws IOException {
-//		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
-//
-//		return objectMapper.readValue(personResponse.getInputStream(), List<Person>.class);
-//	}
+	@Test
+	public void insetPersonTest() {
+		when(template.send(anyString(), anyString())).thenAnswer(new Answer<Object>(){
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return null;
+            }
+        });
+        when(personMapper.domainToResponse((Person) any())).thenReturn(personDTOMock());
 
-//	private Person buildPersonResponse(String responseFilePath) throws IOException {
-//		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
-//
-//		return objectMapper.readValue(personResponse.getInputStream(), Person.class);
-//	}
+		personService.insertPerson(personMock());
+	}
+
+    @Test
+    public void insetPersonNullTest() {
+        when(personRepository.save(any())).thenThrow(DataIntegrityViolationException.class);
+
+        personService.insertPerson(personMock());
+    }
+
+    @Test
+    public void deletePersonTest() {
+        when(personRepository.findByDocument(anyLong())).thenReturn(Optional.of(personMock()));
+
+        personService.deletePerson(1l);
+    }
+
+    @Test
+    public void deletePersonNullTest() {
+        personService.deletePerson(1l);
+    }
+
+    @Test
+    public void putPersonTest() {
+        when(personRepository.findByDocument(anyLong())).thenReturn(Optional.of(personMock()));
+
+        personService.putPerson(personMock());
+    }
+
+    @Test
+    public void putPersonDifferentIdTest() {
+        when(personRepository.findByDocument(anyLong())).thenReturn(Optional.of(personMock()));
+
+        Person person = personMock();
+        person.setId(2L);
+
+        personService.putPerson(person);
+    }
+
+    @Test
+    public void putPersonNullTest() {
+        personService.putPerson(personMock());
+    }
 
     private List<Person> personListMock() {
         Person person = new Person();
@@ -129,4 +182,16 @@ public class PersonServiceTest {
                 .build());
         return personDTOList;
     }
+
+//    	private List<Person> buildPersonResponseList(String responseFilePath) throws IOException {
+//		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
+//
+//		return objectMapper.readValue(personResponse.getInputStream(), List<Person>.class);
+//	}
+
+//	private Person buildPersonResponse(String responseFilePath) throws IOException {
+//		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
+//
+//		return objectMapper.readValue(personResponse.getInputStream(), Person.class);
+//	}
 }
