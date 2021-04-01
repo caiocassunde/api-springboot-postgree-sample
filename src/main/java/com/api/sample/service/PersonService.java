@@ -64,7 +64,7 @@ public class PersonService {
 
             template.send("api-spring-topic", personMapper.domainToResponse(person).toString());
         } catch (DataIntegrityViolationException ex) {
-            ret = buildReturn("Document already in database", HttpStatus.BAD_REQUEST.toString());
+            ret = buildReturn("Request can't be saved in database", HttpStatus.BAD_REQUEST.toString());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ret);
         }
         ret = buildReturn("Created", HttpStatus.CREATED.toString());
