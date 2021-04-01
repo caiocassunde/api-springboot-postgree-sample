@@ -49,13 +49,13 @@ public class PersonServiceTest {
     @Mock
     private KafkaTemplate template;
 
-	@Test
-	public void getAllPersonTest() {
-		when(personRepository.findAll()).thenReturn(personListMock());
-		when(personMapper.domainToResponse((List<Person>) any())).thenReturn(personDTOListMock());
+    @Test
+    public void getAllPersonTest() {
+        when(personRepository.findAll()).thenReturn(personListMock());
+        when(personMapper.domainToResponse((List<Person>) any())).thenReturn(personDTOListMock());
 
-		personService.getAllPerson();
-	}
+        personService.getAllPerson();
+    }
 
     @Test
     public void getAllPersonNullTest() {
@@ -90,9 +90,9 @@ public class PersonServiceTest {
         personService.getPersonByDocument(1L);
     }
 
-	@Test
-	public void insetPersonTest() {
-		when(template.send(anyString(), anyString())).thenAnswer(new Answer<Object>(){
+    @Test
+    public void insetPersonTest() {
+        when(template.send(anyString(), anyString())).thenAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 return null;
@@ -100,8 +100,8 @@ public class PersonServiceTest {
         });
         when(personMapper.domainToResponse((Person) any())).thenReturn(personDTOMock());
 
-		personService.insertPerson(personMock());
-	}
+        personService.insertPerson(personMock());
+    }
 
     @Test
     public void insetPersonNullTest() {
@@ -167,31 +167,31 @@ public class PersonServiceTest {
 
     private PersonDTO personDTOMock() {
         return PersonDTO.builder()
-                .id(1L)
-                .document(123L)
-                .name("teste")
-                .build();
+                        .id(1L)
+                        .document(123L)
+                        .name("teste")
+                        .build();
     }
 
     private List<PersonDTO> personDTOListMock() {
         List<PersonDTO> personDTOList = new ArrayList<>();
         personDTOList.add(PersonDTO.builder()
-                .id(1L)
-                .document(123L)
-                .name("teste")
-                .build());
+                                   .id(1L)
+                                   .document(123L)
+                                   .name("teste")
+                                   .build());
         return personDTOList;
     }
 
-//    	private List<Person> buildPersonResponseList(String responseFilePath) throws IOException {
-//		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
-//
-//		return objectMapper.readValue(personResponse.getInputStream(), List<Person>.class);
-//	}
+    //    	private List<Person> buildPersonResponseList(String responseFilePath) throws IOException {
+    //		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
+    //
+    //		return objectMapper.readValue(personResponse.getInputStream(), List<Person>.class);
+    //	}
 
-//	private Person buildPersonResponse(String responseFilePath) throws IOException {
-//		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
-//
-//		return objectMapper.readValue(personResponse.getInputStream(), Person.class);
-//	}
+    //	private Person buildPersonResponse(String responseFilePath) throws IOException {
+    //		Resource personResponse = resourceLoader.getResource("classpath:" + responseFilePath);
+    //
+    //		return objectMapper.readValue(personResponse.getInputStream(), Person.class);
+    //	}
 }

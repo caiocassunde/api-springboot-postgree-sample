@@ -31,30 +31,38 @@ public class PersonService {
         List<Person> people = personRepository.findAll();
 
         if (!CollectionUtils.isEmpty(people)) {
-            return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(people));
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .body(personMapper.domainToResponse(people));
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body(ret);
         }
     }
 
     public ResponseEntity<Object> getPersonById(Long id) {
-        Person person = personRepository.findById(id).orElse(null);
+        Person person = personRepository.findById(id)
+                                        .orElse(null);
         if (Objects.nonNull(person)) {
-            return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(person));
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .body(personMapper.domainToResponse(person));
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body(ret);
         }
     }
 
     public ResponseEntity<Object> getPersonByDocument(Long document) {
-        Person person = personRepository.findByDocument(document).orElse(null);
+        Person person = personRepository.findByDocument(document)
+                                        .orElse(null);
         if (Objects.nonNull(person)) {
-            return ResponseEntity.status(HttpStatus.OK).body(personMapper.domainToResponse(person));
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .body(personMapper.domainToResponse(person));
         } else {
             ret = buildReturn(NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND.toString());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body(ret);
         }
     }
 
@@ -62,17 +70,21 @@ public class PersonService {
         try {
             personRepository.save(person);
 
-            template.send("api-spring-topic", personMapper.domainToResponse(person).toString());
+            template.send("api-spring-topic", personMapper.domainToResponse(person)
+                                                          .toString());
         } catch (DataIntegrityViolationException ex) {
             ret = buildReturn("Request can't be saved in database", HttpStatus.BAD_REQUEST.toString());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ret);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                 .body(ret);
         }
         ret = buildReturn("Created", HttpStatus.CREATED.toString());
-        return ResponseEntity.status(HttpStatus.CREATED).body(ret);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(ret);
     }
 
     public ResponseEntity<Object> deletePerson(Long document) {
-        Person person = personRepository.findByDocument(document).orElse(null);
+        Person person = personRepository.findByDocument(document)
+                                        .orElse(null);
 
         if (Objects.nonNull(person)) {
             personRepository.delete(person);
@@ -80,31 +92,37 @@ public class PersonService {
         } else {
             ret = buildReturn("Document Not in Database", HttpStatus.NOT_FOUND.toString());
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(ret);
     }
 
     public ResponseEntity<Object> putPerson(Person person) {
-        Person personInDb = personRepository.findByDocument(person.getDocument()).orElse(null);
+        Person personInDb = personRepository.findByDocument(person.getDocument())
+                                            .orElse(null);
 
         if (Objects.nonNull(personInDb)) {
-            if (person.getId().equals(personInDb.getId())) {
+            if (person.getId()
+                      .equals(personInDb.getId())) {
                 personRepository.save(person);
                 ret = buildReturn("Change With Success", HttpStatus.OK.toString());
             } else {
                 ret = buildReturn("The id is not the same of this document", HttpStatus.NOT_FOUND.toString());
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                     .body(ret);
             }
-            return ResponseEntity.status(HttpStatus.OK).body(ret);
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .body(ret);
         } else {
             ret = buildReturn("Document Not in Database", HttpStatus.NOT_FOUND.toString());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ret);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body(ret);
         }
     }
 
     public Return buildReturn(String message, String status) {
         return Return.builder()
-                .message(message)
-                .status(status)
-                .build();
+                     .message(message)
+                     .status(status)
+                     .build();
     }
 }
