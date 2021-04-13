@@ -14,7 +14,4 @@ public interface PersonMapper {
 
     @Mapping(expression = "java(LocalDateTime.now())", target = "timestampGet")
     PersonDTO domainToResponse(Person person);
-
-    @Mapping(expression = "java(LocalDateTime.now())", target = "timestampGet")
-    List<PersonDTO> domainToResponse(List<Person> person);
 }

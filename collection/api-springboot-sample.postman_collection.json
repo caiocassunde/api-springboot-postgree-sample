@@ -20,6 +20,18 @@
 					"path": [
 						"api",
 						"person"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "2",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -83,10 +95,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"document\": 123,\n\t\"name\": \"Caio\"\n}",
-					"options": {
-						"raw": {}
-					}
+					"raw": "{\n\t\"document\": 123,\n\t\"name\": \"Caio\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/person",
@@ -172,7 +181,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "df054bbc-224c-48ad-bfc9-a3a7faf7660f",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -182,7 +190,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "c0c7588e-1067-4982-ace4-1b15dfc58ca5",
 				"type": "text/javascript",
 				"exec": [
 					""

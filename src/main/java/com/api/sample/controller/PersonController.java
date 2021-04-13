@@ -2,6 +2,9 @@ package com.api.sample.controller;
 
 import com.api.sample.service.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +32,8 @@ public class PersonController {
 
 	@GetMapping
 	@ApiOperation(value="Select a list of people in DB")
-	public ResponseEntity<Object> getAllPerson(){
-		return personService.getAllPerson();
+	public ResponseEntity<Object> getAllPerson(@PageableDefault(sort="id", direction= Sort.Direction.DESC) Pageable pageable){
+		return personService.getAllPerson(pageable);
 	}
 
 	@GetMapping("/id/{id}")
