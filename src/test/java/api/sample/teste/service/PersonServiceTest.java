@@ -51,14 +51,14 @@ public class PersonServiceTest {
     @Mock
     private KafkaTemplate template;
 
-    /*@Test
-    public void getAllPersonTest() {
-        Pageable pageable = PageRequest.of(0, 8);
-        when(personRepository.findAll((Pageable) any())).thenReturn((Page<Person>) pageableMock);
-        when(personMapper.domainToResponse(any())).thenReturn(personDTOMock());
-
-        personService.getAllPerson(pageable);
-    }*/
+//    @Test
+//    public void getAllPersonTest() {
+//        Pageable pageable = PageRequest.of(0, 1);
+//        when(personRepository.findAll((Pageable) any())).thenReturn((Page<Person>) pageableMock);
+//        when(personMapper.domainToResponse(any())).thenReturn(personDTOMock());
+//
+//        personService.getAllPerson(pageable);
+//    }
 
     @Test
     public void getPersonByIdTest() {
