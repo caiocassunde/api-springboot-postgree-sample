@@ -16,6 +16,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -38,7 +39,7 @@ public class PersonService {
     public ResponseEntity<Object> getPersonById(Long id) {
         Person person = personRepository.findById(id)
                                         .orElse(null);
-        if (Objects.nonNull(person)) {
+        if (Optional.ofNullable(person).isPresent()) {
             return ResponseEntity.status(HttpStatus.OK)
                                  .body(personMapper.domainToResponse(person));
         } else {
@@ -51,7 +52,7 @@ public class PersonService {
     public ResponseEntity<Object> getPersonByDocument(Long document) {
         Person person = personRepository.findByDocument(document)
                                         .orElse(null);
-        if (Objects.nonNull(person)) {
+        if (Optional.ofNullable(person).isPresent()) {
             return ResponseEntity.status(HttpStatus.OK)
                                  .body(personMapper.domainToResponse(person));
         } else {
@@ -81,7 +82,7 @@ public class PersonService {
         Person person = personRepository.findByDocument(document)
                                         .orElse(null);
 
-        if (Objects.nonNull(person)) {
+        if (Optional.ofNullable(person).isPresent()) {
             personRepository.delete(person);
             ret = buildReturn("Deleted", HttpStatus.OK.toString());
         } else {
@@ -95,7 +96,7 @@ public class PersonService {
         Person personInDb = personRepository.findByDocument(person.getDocument())
                                             .orElse(null);
 
-        if (Objects.nonNull(personInDb)) {
+        if (Optional.ofNullable(personInDb).isPresent()) {
             if (person.getId()
                       .equals(personInDb.getId())) {
                 personRepository.save(person);
